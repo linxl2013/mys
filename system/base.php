@@ -37,13 +37,10 @@ function myAutoLoad($classname){
 		include_once $classname . '.php';
 }
 
-/**********************************function************************************************/
-include 'global.php';
-
 /**********************************components*****************************************/
 $__components = array();
 $__componentConfig = $config;
-
+/**设置组件*/
 function setComponent($id,$component,$merge=true){
 	global $__components, $__componentConfig;
 	if($component===null){
@@ -77,7 +74,7 @@ function setComponent($id,$component,$merge=true){
 	else
 		$__componentConfig[$id]=$component;
 }
-
+/**创建组件*/
 function createComponent($config){
 	if(is_string($config)){
 		$type=$config;
@@ -115,7 +112,7 @@ function createComponent($config){
 	return $object;
 }
 
-/** Retrieves the named application component. */
+/** 获取组件 */
 function getComponent($id,$createIfNull=true){
 	global $__components, $__componentConfig;
 	if(isset($__components[$id]))
@@ -139,19 +136,34 @@ function getComponents($loadedOnly=true){
 		return array_merge($__componentConfig, $__components);
 }
 
-/**初始化数据库操作*/
-$db = getComponent('db');
-function &getDb(){
-	global $db;
-	return $db;
-}
+/**********************************function************************************************/
+include 'global.php';
+
+/** 获取数据库操作 */
 function db(){
-	return getDb();
+	return getComponent('db');
+}
+function getDb(){
+	return db();
+}
+/** 获取缓存对象 */
+function cache(){
+	return getComponent('cache');
 }
 
-//$cache = getComponent('cache');
+//过滤参数
+if(function_exists('get_magic_quotes_gpc') && !get_magic_quotes_gpc()){
+	if(isset($_GET))
+		$_GET = setAddSlashes($_GET);
+	if(isset($_POST))
+		$_POST = setAddSlashes($_POST);
+	//if(isset($_REQUEST))
+	//	$_REQUEST = setAddSlashes($_REQUEST);
+	if(isset($_COOKIE))
+		$_COOKIE = setAddSlashes($_COOKIE);
+}
 
-//载入模块文件
+//载入模板引擎文件
 $smarty_config = include APP_PATH.DIRECTORY_SEPARATOR.'configs'.DIRECTORY_SEPARATOR.'smarty.php';
 require APP_PATH.$smarty_config["smarty_path"];
 $smarty = new MySmarty();

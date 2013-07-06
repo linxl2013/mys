@@ -1,8 +1,9 @@
 <?php
-  	/**
-  	 * 全局函数
-   	 */
-   	 
+/**
+ * 全局函数
+ */
+
+ /**字符串替换*/  	 
 function strFormat($string, $array){
 	foreach ($array as $key => $value) {
 		$string = str_replace($key, $value, $string);
@@ -23,22 +24,22 @@ function test($str)	{
 function setAddSlashes($data){
 	if(is_array($data)){
 		$data = array_map("setAddSlashes",$data);
-	}else{
+	}elseif(is_string($data)){
 		$data = addslashes($data);
 		//$data = str_replace("_", "\_", $data);
-		//$data = str_replace("%", "\%", $data);
-		//$data = mysql_real_escape_string($data);
+		$data = str_replace("%", "\%", $data);
 	}
 	return $data;
 }
 /**除去反斜杠*/
 function setSripSlashes($data){
+	if(is_object($data)&&!empty($data->attributes)) $data=$data->attributes;
 	if(is_array($data)){
 		$data = array_map("setSripSlashes",$data);
-	}else{
+	}elseif(is_string($data)){
 		$data = stripslashes($data);
 		//$data = str_replace("\_", "_", $data);
-		//$data = str_replace("\%", "%", $data);
+		$data = str_replace("\%", "%", $data);
 	}
 	return $data;
 }

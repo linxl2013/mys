@@ -22,7 +22,7 @@ switch($action){
 	case 'edit':
 		$id = intval($_GET['id']);
 		$menuList = AdminMenu::getList();
-		$menu = AdminMenu::model()->findByPK($id);
+		$menu = AdminMenu::getRow($id);
 		
 		$smarty->assign('menuList', $menuList);
 		$smarty->assign('menu', $menu);

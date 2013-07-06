@@ -15,5 +15,10 @@ class MySmarty extends Smarty {
 			parent::display($template, $cache_id, $compile_id, $parent);
 		}
 	}
+	
+	public function assign($tpl_var, $value = null, $nocache = false) {
+		$value = setSripSlashes($value);
+		parent::assign($tpl_var, $value, $nocache);
+	}
 }
 ?>

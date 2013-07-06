@@ -16,34 +16,6 @@ class AdminMenu extends CActiveRecord
 	{
 		return '{{admin_menu}}';
 	}
-	/*
-	public function rules()
-	{
-		return array(
-			array('parent_id, sort', 'length', 'max'=>11),
-			array('name, code', 'length', 'max'=>50),
-			array('url', 'length', 'max'=>255),
-			
-			array('id, parent_id, name, url, code, sort, locked', 'safe', 'on'=>'search'),
-		);
-	}*/
-	/*
-	public function search()
-	{
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('parent_id',$this->parent_id,true);
-		$criteria->compare('name',$this->name,true);
-		$criteria->compare('url',$this->url,true);
-		$criteria->compare('code',$this->code,true);
-		$criteria->compare('sort',$this->sort,true);
-		$criteria->compare('locked',$this->locked,true);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}*/
 
 	/*public function delete($id){
 		$row = $this->getRow($id);
@@ -61,10 +33,10 @@ class AdminMenu extends CActiveRecord
 		$list = db()->createCommand($sql)
 						->bindValue(':ParentID', intval($parent_id), PDO::PARAM_INT)
 						->queryAll();
-		
+
 		$child_arr = array();
-  		if($list){
-  			foreach ($list as $row){
+		if($list){
+			foreach ($list as $row){
 				$child_arr[$row['id']] = $row;
 				if($row['id'] != NULL){
 					$child_arr[$row['id']]['child'] = self::getList($row['id'], $order);
@@ -74,22 +46,18 @@ class AdminMenu extends CActiveRecord
 		return $child_arr;
 	}
 
-	public function getRow($id){
-		$query = $this->db->get_where($this->table, array('id' => $id), 1);
-		return $query->row_array();
+	public static function getRow($id){
+		return self::model()->findByPK($id);
 	}
   	
-  	
-  	public function existChild($parent_id){
-  		$this->db->select('id');
-  		$query = $this->db->get_where($this->table, array('parent_id' => $parent_id), 1);
-  		if($query->num_rows > 0){
+  	public static function existChild($parent_id){
+  		$count = self::model()->count('parent_id => :ParentID', array(':ParentID' => $parent_id));
+		if($count > 0)
   			return true;
-  		}
   		return false;
-  	}
+	}
   	
-	public function checkLocked($action, $locked){
+	public static function checkLocked($action, $locked){
 		if($locked != 3){
 			if($action == "update"){
 				if($locked == 1)
