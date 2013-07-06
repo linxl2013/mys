@@ -1,95 +1,76 @@
 <?php
-  /**
-   * 后台栏目信息管理
-   */
-  define('IN_CMS', true);
-  
-  require_once 'include/init.php';
-  
-  $action = !empty($_GET['action']) ? trim($_GET['action']):'';
-  if ($_SESSION['user_id'] != 1) {
-	showMsg('你没有权限浏览此页。', '', 3);
-  }
-  $articleCateObject  = loadAppClass('article_cate',false,1);
-  $fileObject  = loadAppClass('file',false,1);
-  switch ($action) {
-	case 'add':
-        $smarty->assign('action', '?action=insert');
-        $cateList = $articleCateObject->getCateList();
-        $smarty->assign('cateList', $cateList);
-        $smarty->display('admin/article_cate_edit.tpl');
-		break;
-	case 'edit':
-        $cate_id = $_GET['cate_id'];
-        $cateList = $articleCateObject->getCateList();
-        $smarty->assign('cateList', $cateList);
-        $cate = $articleCateObject->getCate($cate_id);
-  		$images = $fileObject->getFilesByType($cate['cate_id'],"article_cate",'image',false);
-		if(!empty($images)){
-			$file_id = array();
-			foreach($images as $image){
-				$file_id[] =$image["file_id"];
-			}
-			$file_id = implode(',', $file_id);
-			$smarty->assign('file_id', $file_id);
-		}
-		$smarty->assign('images', $images);
+/**
+ * 后台栏目信息管理
+ */
+define('IN_CMS', true);
 
-		$smarty->assign('action', '?action=update&cate_id='. $cate_id);
-        $smarty->assign('cate', $cate);
+require_once 'include/init.php';
+  
+$action = !empty($_GET['action']) ? trim($_GET['action']):'';
+if($_SESSION['userid'] != 1) {
+	showMsg('你没有权限浏览此页。', '', 3);
+}
+
+switch ($action) {
+	case 'add':
+		$smarty->assign('action', '?action=insert');
+		$list = ArticleCate::getList();
+		$smarty->assign('list', $list);
+		$smarty->assign('paneltitle', buildTitle(array('分类列表'=>'article_cate.php', '添加分类')));
+		$smarty->display('admin/article_cate_edit.tpl');
+		break;
+		
+	case 'edit':
+		$id = $_GET['id'];
+		$list = ArticleCate::getList();
+		$row = ArticleCate::getRow($id);
+
+		$smarty->assign('action', '?action=update&id='. $id);
+		$smarty->assign('list', $list);
+        $smarty->assign('row', $row);
+		$smarty->assign('paneltitle', buildTitle(array('分类列表'=>'article_cate.php', '后台栏目列表')));
         $smarty->display('admin/article_cate_edit.tpl');
 		break;
 
 	case 'insert':
-		$data = array(
-			'parent_id'=> intval($_POST['parent_id']),
-			'cate_name' => trim($_POST['cate_name']),
-			'cate_en_name' => trim($_POST['cate_en_name']),
-			'link' => trim($_POST['link']),
-			'link_name' => trim($_POST['link_name']),
-			'sort_order' => intval($_POST['sort_order']),
-		);
-		$articleCateObject->insert($articleCateObject->cateTable,$data);
-		$cate_id = $articleCateObject->insert_id();
-		$fileObject->saveImage("image1",$cate_id,"article_cate");
-		showMsg('操作成功。', 'article_cate.php', 3);
+		$articleCate = new ArticleCate;
+		$articleCate->parent_id = intval($_POST['parent_id']);
+		$articleCate->name =trim($_POST['name']);
+		$articleCate->sort = intval($_POST['sort']);
+		$articleCate->save();
+		$id = $articleCate->getPrimaryKey();
+		if(empty($_POST['sort']))
+			ArticleCate::model()->updateByPK($id, array('sort'=>$id));
+		
+		showMsg('添加分类成功。', 'article_cate.php', 3);
 		break;
-
 
 	case 'update':
-        $cate_id = trim($_GET['cate_id']);
+        $id = trim($_POST['id']);
 		$data = array(
 			'parent_id'=> intval($_POST['parent_id']),
-			'cate_name' => trim($_POST['cate_name']),
-			'cate_en_name' => trim($_POST['cate_en_name']),
-			'link' => trim($_POST['link']),
-			'link_name' => trim($_POST['link_name']),
-			'sort_order' => intval($_POST['sort_order']),
+			'name' => trim($_POST['name']),
+			'sort' => intval($_POST['sort']),
 		);
+		ArticleCate::model()->updateByPK($id, $data);
 
-		$articleCateObject->update($articleCateObject->cateTable,$data,array("cate_id"=>$cate_id));
-		$fileObject->saveImage("image1",$cate_id,"article_cate");
-		showMsg("操作成功！", 'article_cate.php', 3);
+		showMsg("更新分类成功！", 'article_cate.php', 3);
 		break;
 
-	case 'del':
-		$cate_id = $_GET['cate_id'];
-		 $notice = $articleCateObject->delete($articleCateObject->cateTable,array('cate_id' => $cate_id));
-		 switch ($notice){
-		 	case 0:
-		 		showMsg("操作成功！", 'article_cate.php', 3);
-		 	case 1:
-		 		showMsg("操作失败！菜单已经锁定，不能删除！", 'article_cate.php', 3);
-		 	case 2:
-		 		showMsg("操作失败！访菜单下有子菜单，不能删除！", 'article_cate.php', 3);
-		 }
-		if($articleCateObject)
+	case 'delete':
+		$id = $_GET['id'];
+		if(ArticleCate::existChild($id))
+			showMsg("操作失败！访菜单下有子菜单，不能删除！", 'article_cate.php', 3);
+
+		ArticleCate::model()->deleteByPK($id);
 		showMsg("操作成功！", 'article_cate.php', 3);
 		break;
 
 	default:
-		$cateList = $articleCateObject->getCateList();
-		$smarty->assign('cateList', $cateList);
-        $smarty->display('admin/article_cate_list.tpl');		
-  }
+		$cateList = ArticleCate::getList();
+		$smarty->assign('list', $cateList);
+		$smarty->assign('paneltitle', buildTitle(array('分类列表')));
+		$smarty->assign('panelbotton', buildButton(array('添加分类'=>'article_cate.php?action=add')));
+		$smarty->display('admin/article_cate_list.tpl');
+}
 ?>

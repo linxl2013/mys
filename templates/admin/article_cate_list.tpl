@@ -18,36 +18,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <!--{foreach from=$menuList item=item}-->
+                    <!--{foreach $list as $item}-->
                 		<tr>
                         	<!--<td><input type="checkbox" name="id[]" value="<!--{$item.id}-->" /></td>-->
                     		<td><b><!--{$item.id}--></b></td>
                             <td><b><!--{$item.name}--></b></td>
                             <td><b><!--{$item.sort}--></b></td>
                             <td class="last">
-                            	<a href="menu.php?action=edit&id=<!--{$item.id}-->" title="编辑"><img src="<!--{$assets}-->/images/pencil.png" alt="编辑" /></a>
-								<!--{if $item.locked<2}-->
-                                <a href="javascript:del('确定删除该数据？','menu.php?action=delete&id=<!--{$item.id}-->')" title="删除"><img src="<!--{$assets}-->/images/delete.png" alt="删除" /></a>
-								<!--{/if}-->
+                            	<a href="article_cate.php?action=edit&id=<!--{$item.id}-->" title="编辑"><img src="<!--{$assets}-->/images/pencil.png" alt="编辑" /></a>
+                                <a href="javascript:del('确定删除该数据？','article_cate.php?action=delete&id=<!--{$item.id}-->')" title="删除"><img src="<!--{$assets}-->/images/delete.png" alt="删除" /></a>
                             </td>
                     	</tr>
-                    	<!--{foreach from=$item.child item=child}-->
+                    	<!--{foreach $item.child as $child}-->
                     	<tr>
                         	<!--<td><input type="checkbox" name="id[]" value="<!--{$child.id}-->" /></td>-->
                     		<td><!--{$child.id}--></td>
                             <td>----><!--{$child.name}--></td>
                             <td><!--{$child.sort}--></td>
                             <td class="last">
-                            	<a href="menu.php?action=edit&id=<!--{$child.id}-->" title="编辑"><img src="<!--{$assets}-->/images/pencil.png" alt="编辑" /></a>
-                                <!--{if $child.locked<2}-->
-                                <a href="javascript:del('确定删除该数据？','menu.php?action=delete&id=<!--{$child.id}-->')" title="删除"><img src="<!--{$assets}-->/images/delete.png" alt="删除" /></a>
-								<!--{/if}-->
+                            	<a href="article_cate.php?action=edit&id=<!--{$child.id}-->" title="编辑"><img src="<!--{$assets}-->/images/pencil.png" alt="编辑" /></a>
+                                <a href="javascript:del('确定删除该数据？','article_cate.php?action=delete&id=<!--{$child.id}-->')" title="删除"><img src="<!--{$assets}-->/images/delete.png" alt="删除" /></a>
                             </td>
                     	</tr>
                     	<!--{/foreach}-->
                     <!--{foreachelse}-->
                     	<tr>
-                        	<td colspan="5" class="last">暂无记录</td>
+                        	<td colspan="4" class="last">暂无记录</td>
                         </tr>
                     <!--{/foreach}-->
                     </tbody>

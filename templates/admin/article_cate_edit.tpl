@@ -4,33 +4,25 @@
 			<table id="main_form" cellpadding="0" cellspacing="0">
                 	<tr>
                     	<td width="200">名称</td>
-                        <td><input type="text" class="medium_input" name="name" value="<!--{$menu.name|default:''}-->" /></td>
+                        <td><input type="text" class="medium_input" name="name" value="<!--{$row.name|default:''}-->" /></td>
                     </tr>
                     <tr>
                     	<td>所属栏目</td>
                         <td>
 						<select name="parent_id" class="" id="parent_id">
 							<option value="0">==所有分类==</option>
-							<!--{foreach from=$menuList item=item}-->
-							<option value="<!--{$item.id}-->"<!--{if isset($menu.parent_id) && $menu.parent_id == $item.id}--> selected="selected"<!--{/if}--><!--{if $menu.id|default:0==$item.id}--> disabled<!--{/if}-->>|---<!--{$item.name}--></option>
-		    				<!--{foreach from=$item.child item=child}-->
-							<option value="<!--{$child.id}-->" <!--{if isset($child.parent_id) && $child.parent_id == $child.id}--> selected="selected"<!--{/if}--><!--{if $menu.id|default:0==$child.id}--> disabled<!--{/if}-->>|---|---<!--{$child.name}--></option>
+							<!--{foreach $list as $item}-->
+							<option value="<!--{$item.id}-->"<!--{if isset($row.parent_id) && $row.parent_id == $item.id}--> selected="selected"<!--{/if}--><!--{if $row.id|default:0==$item.id}--> disabled<!--{/if}-->>|---<!--{$item.name}--></option>
+		    				<!--{foreach $item.child as $child}-->
+							<option value="<!--{$child.id}-->" <!--{if isset($child.parent_id) && $child.parent_id == $child.id}--> selected="selected"<!--{/if}--><!--{if $row.id|default:0==$child.id}--> disabled<!--{/if}-->>|---|---<!--{$child.name}--></option>
 							<!--{/foreach}-->
 							<!--{/foreach}-->
 						</select>
                         </td>
                     </tr>
-                	<tr>
-                    	<td width="200">标志</td>
-                        <td><input type="text" class="medium_input" name="code" value="<!--{$menu.code|default:''}-->" /></td>
-                    </tr>
-                	<tr>
-                    	<td width="200">链接</td>
-                        <td><input type="text" class="medium_input" name="url" value="<!--{$menu.url|default:''}-->" /></td>
-                    </tr>
                     <tr>
                     	<td>排序</td>
-                        <td><input type="text" class="small_input" name="sort" value="<!--{$menu.sort|default:''}-->" />&nbsp;&nbsp;数值大的排前</td>
+                        <td><input type="text" class="small_input" name="sort" value="<!--{$row.sort|default:''}-->" />&nbsp;&nbsp;数值大的排前</td>
                     </tr>
                 </table>
                 <div class="main_bottom">

@@ -5,6 +5,7 @@
  */
 class Admin extends CActiveRecord
 {
+	public static $salt='';
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -21,6 +22,26 @@ class Admin extends CActiveRecord
 	public function tableName()
 	{
 		return '{{admin}}';
+	}
+	
+	public static function getRow($id){
+		return self::model()->findByPK($id);
+	}
+	
+	public static function getList($keyword='', $order='ASC'){
+		$criteria = new CDbCriteria;
+		$criteria->order = 'id '.$order;
+		if($keyword){
+			$criteria->condition = 'locate(:Username, username)>0';
+			$criteria->params = array(':Username' => $keyword);
+		}
+		
+		$rows = self::model()->findAll($criteria);
+		$list = array();
+		foreach($rows as $item){
+			$list[] = $item;
+		}
+		return $list;
 	}
 	
 	// 检查是否有权限操作
@@ -83,10 +104,15 @@ class Admin extends CActiveRecord
 		return md5($salt . $password) === $dbPassword;
 	}
    
-	protected function hashPassword($password,$salt=''){
+	public static function hashPassword($password, $salt=''){
 		if(!$salt)
 			$salt = time();
-		$this->salt = $salt;
-		return md5($salt.$password);
+		self::$salt = $salt;
+		return md5($salt . $password);
+	}
+	
+	/**检查用户名是否存在*/
+	public static function existUserName($username){
+		return self::model()->count('username=:Username', array(':Username'=>$username)) >0 ? true : false;
 	}
 }

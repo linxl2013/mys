@@ -1,10 +1,5 @@
         <form action="?action=update" method="post" name="form1" id="form1">
-		<div class="main_title" style="position:fixed;top:0;left:0;right:10px;z-index:9999;">
-			<span class="title">
-				<!--{$paneltitle}-->
-			</span>
-			<input class="titlebutton" type="submit" value="保 存" />
-		</div>
+		<!--{include file="admin/comm/panelsave.tpl"}-->
         <div class="main_content margintop36">
 			<table id="main_form" cellpadding="0" cellspacing="0">
                 	<tr>
@@ -59,7 +54,7 @@
                 <div class="main_bottom">
                 	<div class="main_submit">
                 	<input id="subSubmit" type="submit" value="保 存" />
-                    <input id="subReset" type="reset" value="重 置" />
+                    <input id="subReset" type="button" onclick="history.back()" value="返 回" />
                     </div>
                 </div>
         </div>

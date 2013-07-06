@@ -42,6 +42,7 @@ switch($action){
 		//$menu->attributes = $data;
 		$menu->parent_id	= intval($_POST['parent_id']);
 		$menu->name			= trim($_POST['name']);
+		$menu->code			= trim($_POST['code']);
 		$menu->url				= trim($_POST['url']);
 		$menu->sort			= intval($_POST['sort']);
 		$menu->save();
@@ -58,6 +59,7 @@ switch($action){
 		$data = array(
 			'parent_id'=> intval($_POST['parent_id']),
 			'name' => trim($_POST['name']),
+			'code' => trim($_POST['code']),
 			'url' => trim($_POST['url']),
 			'sort' => intval($_POST['sort']),
 		);

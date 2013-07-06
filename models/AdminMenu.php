@@ -51,7 +51,7 @@ class AdminMenu extends CActiveRecord
 	}
   	
   	public static function existChild($parent_id){
-  		$count = self::model()->count('parent_id => :ParentID', array(':ParentID' => $parent_id));
+  		$count = self::model()->count('parent_id = :ParentID', array(':ParentID' => $parent_id));
 		if($count > 0)
   			return true;
   		return false;
