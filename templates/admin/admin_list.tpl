@@ -1,5 +1,5 @@
 			<!--{include file="admin/comm/paneltop.tpl"}-->
-			<form action="" method="get" name="form1" id="form1">
+			<form action="" method="get" name="form2" id="form2">
             <div class="main_content margintop36">
             	<table id="main_table" cellpadding="0" cellspacing="0" >
                 	<thead>
@@ -46,7 +46,7 @@
                             <option value="delete">设置为删除</option>
                         </select>
                     </span>
-                    <a href="javascript:;" onclick="checksubmit('form1','sel_action')" class="main_button">执行选择</a>
+                    <a href="javascript:;" onclick="checksubmit('form2','sel_action')" class="main_button">执行选择</a>
                 </div>
             </div>
             </form>

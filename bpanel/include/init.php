@@ -18,10 +18,10 @@ $smarty->assign('panelbotton', '');
 
 $keyword = empty($_GET['keyword']) ? '' : trim($_GET['keyword']);
 $smarty->assign('keyword', $keyword);
+$page = empty($_GET['page']) ? 1 : intval($_GET['page']);
+$smarty->assign('page', $page);
 
-//$searchObject = loadAppClass("search",false,1);
-//$fileObject = loadAppClass("file",false,1);
-//$fileObject->autoCleanTemp();
+File::autoCleanTemp();
 $smarty->assign(array("sess_name"=>session_name(), "sess_id"=>session_id()));
 $smarty->assign('templateUrl', '../templates/admin');
 $smarty->assign('assets', '../public/admin');

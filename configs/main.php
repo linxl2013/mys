@@ -17,7 +17,7 @@ return array(
 		'charset' => 'utf8',
 		'tablePrefix' => 'mys_',
 		// 开启表结构缓存（schema caching）提高性能
-		'schemaCachingDuration'=>3600,
+		//'schemaCachingDuration'=>3600,
 	),
 	
 	'cache' => array(

@@ -1,7 +1,7 @@
 <?php
 define('IN_CMS', true);
 session_start();
-require_once 'system/libraries/classes/captcha.class.php';
+require_once 'system/library/captcha.class.php';
 
 if(function_exists("gd_info")){
 	$captcha = new captcha;

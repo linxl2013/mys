@@ -19,6 +19,7 @@ set_include_path(implode(PATH_SEPARATOR, array(
 	realpath(APP_PATH.'/system/caching'),
 	realpath(APP_PATH.'/system/collections'),
 	realpath(APP_PATH.'/models'),
+	realpath(APP_PATH.'/system/library'),
     get_include_path(),
 )));
 /**自动加载*/
@@ -180,4 +181,5 @@ $smarty->assign("templateUrl",$templateUrl);
 
 $siteConfig = loadSeri("site_config");
 $smarty->assign("site",$siteConfig);
+$perpage = $siteConfig['perpage'];
 ?>

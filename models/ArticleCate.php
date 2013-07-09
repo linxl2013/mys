@@ -16,6 +16,13 @@ class ArticleCate extends CActiveRecord
 	{
 		return '{{article_cate}}';
 	}
+	
+	public function relations()
+	{
+		return array(
+			'article' => array(self::HAS_MANY, 'Article', 'cate_id'),
+		);
+	}
 
 	/*public function delete($id){
 		$row = $this->getRow($id);

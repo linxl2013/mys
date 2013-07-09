@@ -509,31 +509,31 @@ function setSripSlashes($data){
 			}
 			
 			if ($curpage - $offset > 1 && $pages > $page) {
-				$multipage = '<a href="' . $mpurl . 'page=1" class="first">' . $lang['first'] . '</a> &nbsp;<a href="' . $mpurl . 'page=1" class="first">' . $lang['prev'] . '</a>';
+				$multipage = '<li><a href="' . $mpurl . 'page=1" class="first">' . $lang['first'] . '</a></li> &nbsp;<li><a href="' . $mpurl . 'page=1" class="first">' . $lang['prev'] . '</a></li>';
 			} else {
-				$multipage = $lang['first'] . " &nbsp;" . $lang['prev'] . "&nbsp;";
+				$multipage = '<li><a class="disable" href="javascript:;">'.$lang['first'] . '</a></li> &nbsp; <li><a class="disable" href="javascript:;">'. $lang['prev'] . '</a></li>&nbsp;';
 			}
 			
 			if ($curpage > 1) {
-				$multipage = '<a href="' . $mpurl . 'page=1" class="first">' . $lang['first'] . '</a> &nbsp; <a href="' . $mpurl . 'page=' . ($curpage - 1) . '" class="prev">' . $lang['prev'] . '</a> &nbsp;';
+				$multipage = '<li><a href="' . $mpurl . 'page=1" class="first">' . $lang['first'] . '</a></li> &nbsp; <li><a href="' . $mpurl . 'page=' . ($curpage - 1) . '" class="prev">' . $lang['prev'] . '</a></li> &nbsp;';
 			} else {
 				$multipage .= '';
 			}
 			
 			for($i = $from; $i <= $to; $i ++) {
 				if ($i == $curpage) {
-					$multipage .= '<strong>' . $i . '</strong> &nbsp;';
+					$multipage .= '<li><a class="disable" href="javascript:;">' . $i . '</a></li> &nbsp;';
 				} else {
-					$multipage .= '<a href="' . $mpurl . 'page=' . $i . '">' . $i . '</a> &nbsp;';
+					$multipage .= '<li><a href="' . $mpurl . 'page=' . $i . '">' . $i . '</a></li> &nbsp;';
 				}
 			}
 			if ($curpage < $pages) {
-				$multipage .= '<a href="' . $mpurl . 'page=' . ($curpage + 1) . '" class="next">' . $lang['next'] . '</a> &nbsp;<a href="' . $mpurl . 'page=' . $pages . '" class="last">' . $lang['last'] . '</a>';
+				$multipage .= '<li><a href="' . $mpurl . 'page=' . ($curpage + 1) . '" class="next">' . $lang['next'] . '</a></li> &nbsp;<li><a href="' . $mpurl . 'page=' . $pages . '" class="last">' . $lang['last'] . '</a></li>';
 			} else {
-				$multipage .= $lang['next'] . " &nbsp;" . $lang['last'] . "&nbsp;";
+				$multipage .= '<li><a class="disable" href="javascript:;">'.$lang['next'] . '</a></li> &nbsp;<li><a class="disable" href="javascript:;">' . $lang['last'] . '</a></li>&nbsp;';
 			}
 			
-			$multipage = $multipage ? '<div class="page"> &nbsp;' . $multipage . ' &nbsp;</div>' : '';
+			//$multipage = $multipage ? '<div class="page"> &nbsp;' . $multipage . ' &nbsp;</div>' : '';
 		}
 		$maxpage = $realpages;
 		

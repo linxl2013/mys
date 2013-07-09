@@ -225,3 +225,68 @@ ul.menu_ul_third li a span{ background:url(../images/menu_img_arrow.png) no-repe
 #flagtable tr td span{float:left; margin-left:5px;}
 .flag{float:left; list-style:none; margin:0; padding:0;}
 .flag li{float:left; margin-right:5px;}
+
+
+.photoInfoBox{
+	/*padding: 15px 15px 0 15px;
+	margin-bottom: 14px;
+	border: 1px solid #DDDDDD;
+	background-color: #FFF;*/
+	overflow: hidden;
+}
+.photoInfoBox .photo_p label{
+	float: left;
+	width: 320px !important;
+}
+.photoInfoBox .del{
+	margin:0 15px;
+	color: #A02B2B;
+	float:left;
+	text-decoration: none;
+}
+.photoInfoBox .imga{
+	float:right; 
+	/*margin:15px 0 0 15px;*/
+}
+.photoInfoBox .del:hover{
+	text-decoration: underline;
+}
+.photoInfoBox .photo_p{
+	width: auto;
+	float: none;
+	clear: both;
+	background: none repeat scroll 0 0 #FBFBFB;
+    border: 1px solid #DDDDDD;
+    margin: 0 0 14px;
+    padding: 19px;
+	overflow: hidden;
+}
+.photoInfoBox textarea{
+	clear: both;
+}
+.imgSeat{
+	float: left;
+	display: block;
+	width: 29px;
+	margin-left: 10px;
+}
+.imgSeat .imgup{
+	float: left;
+}
+.imgSeat .imgup a{
+	display: block;
+	width: 29px;
+	height: 26px;
+	background: url(../images/but_up.gif);
+}
+.imgSeat span a span { display: none; }
+.imgSeat .imgdown{
+	float: left;
+}
+.imgSeat .imgdown a{
+	margin-top: 16px;
+	display: block;
+	width: 29px;
+	height: 26px;
+	background: url(../images/but_down.gif);
+}
