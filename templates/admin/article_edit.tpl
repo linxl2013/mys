@@ -91,7 +91,7 @@ uploadSettings['image1_file']={
 										<span class="imgup"><a href="#imgup"><span>&uarr;</span></a></span>
 										<span class="imgdown"><a href="#imgdown"><span>&darr;</span></a></span>
 									</span>
-									<a href="#" class="imga"><img src="../<!--{$item.image}-->" alt="" style="height:60px;" /></a>
+									<a href="../<!--{$item.image}-->" target="_blank" class="imga"><img src="../<!--{$item.image}-->" alt="" style="height:60px;" /></a>
 									<input type="hidden" class="image_sort" name="image1[edit][<!--{$item.id}-->][sort]" value="<!--{$item.sort}-->" />
 								</p>
 								<!--{/foreach}-->

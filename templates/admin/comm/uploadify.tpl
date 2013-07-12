@@ -83,7 +83,7 @@ function appPhoto(num,data){
         str+= '         <span class="imgup"><a href="#imgup"><span>&uarr;</span></a></span>';
         str+= '         <span class="imgdown"><a href="#imgdown"><span>&darr;</span></a></span>';
         str+= '    </span>';
-        str+= '    <a href="#" class="imga"><img src="../uploads/temp/'+ data.save_name+'.'+ data.extension +'"" alt="" style="height:60px;" /></a>';
+        str+= '    <a href="../uploads/temp/'+ data.save_name+'.'+ data.extension +'" target="_blank" class="imga"><img src="../uploads/temp/'+ data.save_name+'.'+ data.extension +'"" alt="" style="height:60px;" /></a>';
         str+= '    <input type="hidden" name="image'+num+'_new[save_name][]" value="'+data.save_name+'" />';
 		str+= '    <input type="hidden" name="image'+num+'_new[extension][]" value="'+data.extension+'" />';
 		str+= '    <input type="hidden" name="image'+num+'_new[file_name][]" value="'+data.file_name+'" />';

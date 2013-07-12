@@ -106,6 +106,7 @@ class File extends CActiveRecord
 		if(!empty($ids)){
 			foreach($ids as $val){
 				$file = self::model()->findByPK($val);
+				if(!$file) continue;
 				if(file_exists(APP_PATH.'/'.$file->image)&&is_file(APP_PATH.'/'.$file->image)){
 					unlink(APP_PATH.'/'.$file->image);
 				}
