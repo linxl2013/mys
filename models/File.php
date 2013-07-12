@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the model class for table "{{menu}}".
+ * This is the model class for table "{{file}}".
  */
 class File extends CActiveRecord
 {
@@ -19,12 +19,17 @@ class File extends CActiveRecord
 	
 	/**根据type获取单个文件*/
 	public static function getFileByType($type_id, $type,$mime_type='image'){
-		return self::model()->find('type_id=:TypeID and type=:Type and mime_type=:MimeType', array('type_id'=>$type_id,'type'=>$type,':MimeType'=>$mime_type));
+		return self::model()->find('type_id=:TypeID and type=:Type and mime_type=:MimeType', array(':TypeID'=>$type_id,':Type'=>$type,':MimeType'=>$mime_type));
 	}
 	
 	/**根据type获取多个文件*/
 	public static function getFilesByType($type_id,$type,$mime_type='image'){
-		$list = self::model()->findAll('type_id=:TypeID and type=:Type and mime_type=:MimeType', array('type_id'=>$type_id,'type'=>$type,':MimeType'=>$mime_type));
+		$criteria = new CDbCriteria;
+		$criteria->condition = 'type_id=:TypeID and type=:Type and mime_type=:MimeType';
+		$criteria->params = array(':TypeID'=>$type_id,':Type'=>$type,':MimeType'=>$mime_type);
+		$criteria->order = 'sort asc';
+		
+		$list = self::model()->findAll($criteria);
 		$rows = array();
 		foreach($list as $key=>$row){
 			$rows[] = $row->attributes;
@@ -48,36 +53,70 @@ class File extends CActiveRecord
 		$images = empty($_POST[$form_id.'_new'])?null:$_POST[$form_id.'_new'];
 		if(!empty($images)){
 			foreach($images['save_name'] as $key=>$val){
+				$filename = self::moveFile($val.'.'.$images['extension'][$key]);
+				
 				$file = new File;
 				$file->type_id = $type_id;
 				$file->type = $type;
-				$file->file_name = $images['file_name'][$key] . $images['extension'][$key];
-				$file->image = $val . $images['extension'][$key];
+				$file->file_name = $images['file_name'][$key];
+				$file->image = $filename;
 				$file->alt =  $images['alt'][$key];
 				$file->sort =  $images['sort'][$key];
 				$file->mime_type = 'image';
 				$file->save();
 			}
 		}
-		
 	}
-		
-	public static function delFile($id){
+
+	/**移动文件*/
+	public static function moveFile($filename){
+		$targetPath = APP_PATH.'/uploads/'.date('Ym');
 		$tempPath = APP_PATH.'/uploads/temp';
-		if(!empty($id)){
-			foreach($delImgs as $val){
+		if(!is_dir($targetPath)){
+			if(!mkdir($targetPath, 0755, true)){
+				return false;
+			}
+		}
+		clearstatcache();
+		if(!file_exists($tempPath.'/'.$filename) || !is_file($tempPath.'/'.$filename)){
+			return false;
+		}
+		if(rename($tempPath.'/'.$filename, $targetPath.'/'.$filename)){
+			return 'uploads/'.date('Ym').'/'.$filename;
+		}
+		return false;
+	}
+	
+	/**按类型删除文件*/
+	public static function delFileByType($id,$type){
+		$id_arr = !is_array($id) ? array($id) : $id;
+		foreach($id_arr as $id ){
+			$files = self::getFilesByType($id,$type);
+			$ids = array();
+			foreach($files as $item){
+				$ids[] = $item['id'];
+			}
+			self::delFile($ids);
+		}
+	}
+	
+	/**删除具体文件*/
+	public static function delFile($ids){
+		$tempPath = APP_PATH.'/uploads/temp';
+		if(!empty($ids)){
+			foreach($ids as $val){
 				$file = self::model()->findByPK($val);
-				if(file_exists(APP_PATH.'/'.$file->image)){
+				if(file_exists(APP_PATH.'/'.$file->image)&&is_file(APP_PATH.'/'.$file->image)){
 					unlink(APP_PATH.'/'.$file->image);
 				}
-				if(file_exists(APP_PATH.'/'.$file->middle_image)){
+				if(file_exists(APP_PATH.'/'.$file->middle_image)&&is_file(APP_PATH.'/'.$file->middle_image)){
 					unlink(APP_PATH.'/'.$file->middle_image);
 				}
-				if(file_exists(APP_PATH.'/'.$file->thumbnail)){
+				if(file_exists(APP_PATH.'/'.$file->thumbnail)&&is_file(APP_PATH.'/'.$file->thumbnail)){
 					unlink(APP_PATH.'/'.$file->thumbnail);
 				}
 			}
-			self::model()->deleteByPK($delImgs);
+			self::model()->deleteByPK($ids);
 		}
 	}
 	
@@ -110,53 +149,6 @@ class File extends CActiveRecord
 		closedir($handler);
 		rename($markFile, $tempPath."/$currentTime.mark");
 		return true;
-	}
-	
-	public static function getCount($cate_id=0, $keyword=''){
-		$criteria = new CDbCriteria;
-		$condition = array();
-		$params = array();
-		
-		if($keyword){
-			$condition[] = 'locate(:Title, title)>0';
-			$params[':Title'] = $keyword;
-		}
-		if($cate_id!=0){
-			$condition[] = 'cate_id = :CateID';
-			$params[':CateID'] = $cate_id;
-		}
-		if(!empty($condition)){
-			$criteria->condition = implode(' and ', $condition);
-			$criteria->params = $params;
-		}
-		return self::model()->count($criteria);
-	}
-	
-	public static function getList($cate_id=0, $keyword='', $limit=0, $offset=0, $order='DESC'){
-		$criteria = new CDbCriteria;
-		$criteria->order = 't.sort '.$order;
-		$condition = array();
-		$params = array();
-		
-		if($keyword){
-			$condition[] = 'locate(:Title, t.title)>0';
-			$params[':Title'] = $keyword;
-		}
-		if($cate_id!=0){
-			$condition[] = 't.cate_id = :CateID';
-			$params[':CateID'] = $cate_id;
-		}
-		if(!empty($condition)){
-			$criteria->condition = implode(' and ', $condition);
-			$criteria->params = $params;
-		}
-		if($limit!=0 || $offset!=0){
-			$criteria->limit = $limit;
-			$criteria->offset = $offset;
-		}
-		$criteria->with = array('article_cate');
-		
-		return self::model()->findAll($criteria);
 	}
 
 	public static function getRow($id){
